@@ -11,6 +11,9 @@ const mult = function (a,b) {
 }
 
 const divide = function (a,b) {
+    if (b === 0) {
+        return "ERR";
+    }
     return a/b;
 }
 
@@ -22,7 +25,9 @@ const operate = function(a,b,operator) {
         "divide": divide,
     }
     functionToRun = operations[operator];
-    return functionToRun(a,b);
+    if (functionToRun) {
+        return functionToRun(a,b);
+    } else console.log("Error: function is undefined")
 }
 
 function updateDisplay(content) {
