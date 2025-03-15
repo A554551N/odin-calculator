@@ -10,6 +10,7 @@ h1 {
 .input {
     background-color: grey;
     font-size: 32px;
+    height: 40px;
     text-align: right;
     padding: 8px;
     border: 2px solid black;
