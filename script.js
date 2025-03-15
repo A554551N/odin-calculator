@@ -21,13 +21,16 @@ const operate = function(a,b,operator) {
         "mult": mult,
         "divide": divide,
     }
-    return operations[operator](a,b);
+    functionToRun = operations[operator];
+    return functionToRun(a,b);
 }
 
 function updateDisplay(content) {
-    // Take in an array object, join it and update the display;
+    // Take in a variable and performs necessary transformations to update the display;
     const display = document.querySelector(".input");
-    display.textContent = content.join("");
+    if(!Array.isArray(content)){
+        display.textContent = content;
+    } else display.textContent = content.join("");
 }
 
 let numA = 0;
@@ -49,6 +52,32 @@ clearButton.addEventListener("click",() =>{
     numA = 0;
     numB = 0;
     operator = "";
+})
+
+const operatorButtons = document.querySelector(".operatorButtonContainer");
+operatorButtons.addEventListener("click",(e) => {
+    if (numA != 0) {
+        //code here will handle the special case where the user hits the operation button without hitting enter (ie 2 + 2 +)
+        //expected behavior will be to perform the operation and then put the result into NumA (updating the screen accordingly)
+    }
+    if (e.target.id === "equal") {
+        numB = parseFloat(userInput.join(""))
+        const result = operate(numA,numB,operator);
+        updateDisplay(result)
+    } else {
+        operator = e.target.id;
+        operationSymbols = {"plus":" + ",
+                        "minus":" - ",
+                        "mult":" x ",
+                        "divide":" ÷ ",
+        }
+        numA = parseFloat(userInput.join(""))
+        // nullish operator catches clicks that miss the buttons as the listener is actually on the box they're in
+        // and will push "undefined" to the screen if not caught.
+        userInput.push(` ${operationSymbols[e.target.id]??""} `);
+        updateDisplay(userInput);
+        userInput=[]
+    }
 })
 // each digit pressed pushes onto an array userInput, displayed on screen joined
 // store the operator button id pressed in operator, join the values of userInput, convert to Int and store in numA, then empty userInput (userInput = [])
