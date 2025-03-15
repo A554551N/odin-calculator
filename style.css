@@ -1,0 +1,12 @@
+body {
+    font-family: "Big Shoulders",sans-serif;
+    background-color:#a4dded;
+}
+
+h1 {
+    text-align: center;
+}
+
+.input {
+    background-color: grey;
+}
