@@ -41,6 +41,15 @@ numberContainer.addEventListener("click",(e) => {
     userInput.push(e.target.id)
     updateDisplay(userInput)
 })
+
+const clearButton = document.querySelector("#clearButton");
+clearButton.addEventListener("click",() =>{
+    userInput = [];
+    updateDisplay(userInput)
+    numA = 0;
+    numB = 0;
+    operator = "";
+})
 // each digit pressed pushes onto an array userInput, displayed on screen joined
 // store the operator button id pressed in operator, join the values of userInput, convert to Int and store in numA, then empty userInput (userInput = [])
 
