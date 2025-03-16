@@ -1,3 +1,9 @@
+let numA = null;
+let numB = null;
+let operator = "";
+let userInput = [];
+let displayContent = [];
+
 const add = function(a,b) {
     return a + b;
 }
@@ -11,6 +17,7 @@ const mult = function (a,b) {
 }
 
 const divide = function (a,b) {
+    // Divide by 0 protection
     if (b === 0) {
         return "ERR";
     }
@@ -33,55 +40,75 @@ const operate = function(a,b,operator) {
 function updateDisplay(content) {
     // Take in a variable and performs necessary transformations to update the display;
     const display = document.querySelector(".input");
-    if(!Array.isArray(content)){
-        display.textContent = content;
-    } else display.textContent = content.join("");
+    displayContent.push(content);
+    display.textContent = displayContent.join("");
 }
 
-let numA = 0;
-let numB = 0;
-let operator = "";
-let userInput = []
+function acceptInput() {
+    const  joinedInput = userInput.join("");
+    console.log(joinedInput)
+    userInput = [];
+    return parseFloat(joinedInput);
+}
+
+function clearDisplay() {
+    const display = document.querySelector(".input");
+    displayContent = [];
+    updateDisplay();
+}
 
 const display = document.querySelector(".input");
 const numberContainer = document.querySelector(".numberButtonContainer");
 numberContainer.addEventListener("click",(e) => {
-    userInput.push(e.target.id)
-    updateDisplay(userInput)
+    userInput.push(e.target.id);
+    updateDisplay(e.target.id)
+    console.log(`UserInput: ${userInput}`)
+    console.log(`Display: ${displayContent}`)
 })
 
 const clearButton = document.querySelector("#clearButton");
 clearButton.addEventListener("click",() =>{
+    clearDisplay();
     userInput = [];
-    updateDisplay(userInput)
-    numA = 0;
-    numB = 0;
+    numA = null;
+    numB = null;
     operator = "";
 })
 
 const operatorButtons = document.querySelector(".operatorButtonContainer");
 operatorButtons.addEventListener("click",(e) => {
-    if (numA != 0) {
+    operationSymbols = {"plus":" + ",
+                    "minus":" - ",
+                    "mult":" x ",
+                    "divide":" ÷ ",
+    }
+
+    if (e.target.id === "equal") {
+        numB = acceptInput();
+        const result = operate(numA,numB,operator);
+        clearDisplay();
+        updateDisplay(result);
+        // Manually empty displayContent so that the buffer is empty when the next number is entered
+        displayContent = [];
+        userInput = [];
+        numA = 0;
+        numB = 0;
+    } else if (typeof(numA) != null) {
         //code here will handle the special case where the user hits the operation button without hitting enter (ie 2 + 2 +)
         //expected behavior will be to perform the operation and then put the result into NumA (updating the screen accordingly)
-    }
-    if (e.target.id === "equal") {
-        numB = parseFloat(userInput.join(""))
+        numB = acceptInput();
         const result = operate(numA,numB,operator);
-        updateDisplay(result)
+        clearDisplay();
+        operator = e.target.id;
+        updateDisplay(result+operationSymbols[operator]);
+        numA = result;
     } else {
         operator = e.target.id;
-        operationSymbols = {"plus":" + ",
-                        "minus":" - ",
-                        "mult":" x ",
-                        "divide":" ÷ ",
-        }
-        numA = parseFloat(userInput.join(""))
+        numA = acceptInput();
         // nullish operator catches clicks that miss the buttons as the listener is actually on the box they're in
         // and will push "undefined" to the screen if not caught.
-        userInput.push(` ${operationSymbols[e.target.id]??""} `);
-        updateDisplay(userInput);
-        userInput=[]
+        displayContent.push(` ${operationSymbols[e.target.id]??""} `);
+        updateDisplay();
     }
 })
 // each digit pressed pushes onto an array userInput, displayed on screen joined
