@@ -46,7 +46,6 @@ function updateDisplay(content) {
 
 function acceptInput() {
     const  joinedInput = userInput.join("");
-    console.log(joinedInput)
     userInput = [];
     return parseFloat(joinedInput);
 }
@@ -62,8 +61,6 @@ const numberContainer = document.querySelector(".numberButtonContainer");
 numberContainer.addEventListener("click",(e) => {
     userInput.push(e.target.id);
     updateDisplay(e.target.id)
-    console.log(`UserInput: ${userInput}`)
-    console.log(`Display: ${displayContent}`)
 })
 
 const clearButton = document.querySelector("#clearButton");
@@ -82,7 +79,6 @@ operatorButtons.addEventListener("click",(e) => {
                     "mult":" x ",
                     "divide":" ÷ ",
     }
-
     if (e.target.id === "equal") {
         numB = acceptInput();
         const result = operate(numA,numB,operator);
@@ -91,9 +87,9 @@ operatorButtons.addEventListener("click",(e) => {
         // Manually empty displayContent so that the buffer is empty when the next number is entered
         displayContent = [];
         userInput = [];
-        numA = 0;
-        numB = 0;
-    } else if (typeof(numA) != null) {
+        numA = null;
+        numB = null;
+    } else if (numA !== null) {
         //code here will handle the special case where the user hits the operation button without hitting enter (ie 2 + 2 +)
         //expected behavior will be to perform the operation and then put the result into NumA (updating the screen accordingly)
         numB = acceptInput();
